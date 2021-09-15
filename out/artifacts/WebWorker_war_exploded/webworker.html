@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button>
+<button onclick="stopWorker()">Stop Worker</button>
+
+<script>
+    var worker;
+
+    function startWorker() {
+
+        if (window.Worker) {
+
+            worker = new Worker("webworker.js");
+
+            /*worker.onmessage = function(event) {
+                document.getElementById("result").innerHTML = event.data;
+            };*/
+
+            //  testing posting message to webworker.js worker file
+            worker.postMessage("test post message");
+
+            //  get message from web worker
+            worker.onmessage = function (msg) {
+                console.log('Message received from worker: '+msg.data);
+            }
+
+        } else {
+            document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+        }
+    }
+
+    function stopWorker() {
+        worker.terminate();
+    }
+</script>
+
+</body>
+</html>
